@@ -1,9 +1,9 @@
-<h3 class="text-center">Cadastre um curso</h3>
+<h3 class="text-center">Altere os valores do curso</h3>
 <div class="row">
   <div class="col-sm-4"></div>
   <div class="col-sm-4">
-    <div [hidden]="submitted" style="width: 400px">
-      <form [formGroup]="cursoForm" (submit)="save()">
+    <div [hidden]="updated" style="width: 400px">
+      <form [formGroup]="cursoForm" (submit)="update()">
         <div class="form-group">
           <label for="nome">Nome</label>
           <input
@@ -14,6 +14,7 @@
             data-placement="right"
             title="Digite o nome do curso"
             name="nome"
+            [(ngModel)]="curso!.nome"
           />
           <div
             class="alert alert-danger"
@@ -25,9 +26,9 @@
             <span *ngIf="cursoForm.get('nome')?.errors?.['required']"
               >Nome do curso é obrigatório</span
             >
-            <span *ngIf="cursoForm.get('nome')?.errors?.['minlength']"
-              >Nome do curso deve ter pelo menos 4 caracteres</span
-            >
+            <span *ngIf="cursoForm.get('nome')?.errors?.['minlength']">
+              Nome do curso deve ter pelo menos 4 caracteres
+            </span>
           </div>
         </div>
         <div class="form-group">
@@ -40,6 +41,7 @@
             data-placement="right"
             title="Digite a carga horária do curso"
             name="cargaHoraria"
+            [(ngModel)]="curso!.cargaHoraria"
           />
           <div
             class="alert alert-danger"
@@ -63,6 +65,7 @@
             name="modalidade"
             data-placement="right"
             title="Selecione a modalidade"
+            [(ngModel)]="curso!.modalidade"
           >
             <option [ngValue]="m.modalidade" *ngFor="let m of modalidades">
               {{ m.descricao }}
@@ -79,11 +82,8 @@
 <div class="row">
   <div class="col-sm-4"></div>
   <div class="col-sm-4">
-    <div [hidden]="!submitted">
-      <h5 class="text-success">Curso adicionado com sucesso</h5>
-      <button (click)="addCursoForm()" class="btn btn-primary">
-        Cadastrar mais curso
-      </button>
+    <div [hidden]="!updated">
+      <h5 class="text-success">Curso alterado com sucesso</h5>
     </div>
   </div>
   <div class="col-sm-4"></div>

@@ -1,15 +1,20 @@
 import { CursoCreateComponent } from './curso-create/component/curso-create.component';
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CursoListComponent } from './curso-list/curso-list.component';
+import { CursoEditComponent } from './curso-edit/curso-edit.component';
 
 @NgModule({
     imports: [
         CommonModule,
-        FormsModule
+        FormsModule,
+        ReactiveFormsModule
     ],
     declarations: [
-        CursoCreateComponent
+        CursoCreateComponent,
+        CursoListComponent,
+        CursoEditComponent
     ],
     exports: [CursoCreateComponent
     ],

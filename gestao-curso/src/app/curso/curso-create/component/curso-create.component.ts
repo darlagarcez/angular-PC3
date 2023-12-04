@@ -1,33 +1,48 @@
-import { Component } from "@angular/core";
-import { Modalidade } from "../../models/modalidade.model";
-import { CursoService } from "../../curso.service";
-import { Curso } from "../../models/curso.model";
+import { Curso } from './../../models/curso.model';
+import { Modalidade } from './../../models/modalidade.model';
+import { CursoService } from './../../curso.service';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
-    selector: 'gc-curso-create',
-    templateUrl: './curso-create.component.html'
+  selector: 'gc-curso-create',
+  templateUrl: './curso-create.component.html',
 })
-export class CursoCreateComponent {
-    nome!: string;
-    cargaHoraria!: number;
-    modalidade!: Modalidade;
-    modalidades = [
-        {modalidade: Modalidade.PRESENCIAL, descricao: 'Presencial'},
-        {modalidade: Modalidade.EAD, descricao: 'Ensino a Distância'},
-        {modalidade: Modalidade.HIBRIDO, descricao: 'Hibrido'}
-    ];
-    
-    constructor(private cursoService: CursoService){}
-
-    onChange(novoValorModalidade: Modalidade){
-        this.modalidade = novoValorModalidade;
+export class CursoCreateComponent implements OnInit {
+  cursoForm!: FormGroup;
+  submitted = false;
+  modalidades = [
+    { modalidade: Modalidade.PRESENCIAL, descricao: 'Presencial' },
+    { modalidade: Modalidade.EAD, descricao: 'Ensino a Distância' },
+    { modalidade: Modalidade.HIBRIDO, descricao: 'Híbrido' },
+  ];
+  constructor(
+    private cursoService: CursoService,
+    private formBuilder: FormBuilder
+  ) {}
+  ngOnInit(): void {
+    this.cursoForm = this.formBuilder.group({
+      nome: new FormControl('', [Validators.required, Validators.minLength(5)]),
+      cargaHoraria: new FormControl('', [Validators.required]),
+      modalidade: new FormControl('', [Validators.required]),
+    });
+  }
+  save() {
+    if (this.cursoForm.valid) {
+      const curso = this.cursoForm.getRawValue() as Curso;
+      this.cursoService.save(curso).subscribe(
+        () => (this.submitted = true),
+        (error) => console.log(error)
+      );
     }
-
-    save(){
-        const curso: Curso = {nome: this.nome, cargaHoraria: this.cargaHoraria, modalidade: this.modalidade};
-        this.cursoService.save(curso).subscribe((res) => {
-            console.log(res);
-        },
-        error => console.log(error));
-    }
+  }
+  addCursoForm() {
+    this.submitted = false;
+    this.cursoForm.reset();
+  }
 }
